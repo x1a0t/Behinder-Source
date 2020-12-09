@@ -3,5 +3,5 @@
 
 当前反编译版本为Beta6
 ## TODO
-- [ ] 连接weblogic时，返回包开头有两个换行，导致一系列问题
+- [x] 连接weblogic时，返回包开头有两个换行，导致一系列问题
 - [ ] tomcat和weblogic相关内存马管理插件

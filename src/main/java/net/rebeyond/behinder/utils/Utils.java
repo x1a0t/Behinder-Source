@@ -9,6 +9,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -347,7 +348,8 @@ public class Utils {
             throw new Exception(new String(bos.toByteArray(), "GBK"));
         } 
         byte[] resData = bos.toByteArray();
-        
+
+        resData = rtrim(ltrim(new String(resData, StandardCharsets.ISO_8859_1))).getBytes(StandardCharsets.ISO_8859_1);
         result.put("data", resData);
         Map<String, String> responseHeader = new HashMap<>();
         for (String key : conn.getHeaderFields().keySet()) {
@@ -356,6 +358,22 @@ public class Utils {
         responseHeader.put("status", conn.getResponseCode() + "");
         result.put("header", responseHeader);
         return result;
+    }
+
+    public static String ltrim(String s) {
+        int i = 0;
+        while (i < s.length() && Character.isWhitespace(s.charAt(i))) {
+            i++;
+        }
+        return s.substring(i);
+    }
+
+    public static String rtrim(String s) {
+        int i = s.length()-1;
+        while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
+            i--;
+        }
+        return s.substring(0,i+1);
     }
     
     public static String sendPostRequest(String urlPath, String cookie, byte[] data) throws Exception {
