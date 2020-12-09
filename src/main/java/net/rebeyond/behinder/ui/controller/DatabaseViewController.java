@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
@@ -741,14 +742,17 @@ public class DatabaseViewController {
             ObservableList<TableColumn> tableViewColumns = FXCollections.observableArrayList();
             Iterator var6 = fieldArray.iterator();
 
+            int num = 0;
             while(var6.hasNext()) {
                 Object field = var6.next();
                 String fieldName = ((JSONObject)field).get("name").toString();
                 TableColumn<List<StringProperty>, String> col = new TableColumn(fieldName);
                 tableViewColumns.add(col);
+                int finalNum = num;
                 col.setCellValueFactory((datax) -> {
-                    return (ObservableValue)((List)datax.getValue()).get(0);
+                    return (ObservableValue)((List)datax.getValue()).get(finalNum);
                 });
+                num++;
             }
 
             this.dataTable.getColumns().setAll(tableViewColumns);
