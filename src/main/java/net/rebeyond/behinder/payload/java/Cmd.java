@@ -13,10 +13,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
-
-
-
-
 public class Cmd
 {
   public static String cmd;
@@ -111,7 +107,6 @@ public class Cmd
           value = value.replace("\n", "").replace("\r", "");
         } 
       }
-
       
       sb.append(value);
       sb.append("\",");
@@ -122,9 +117,3 @@ public class Cmd
     return sb.toString();
   }
 }
-
-
-/* Location:              C:\Users\xxx\Downloads\Behinder_v3.0_Beta_6_win\Behinder_v3.0_Beta6_win.jar!\net\rebeyond\behinder\payload\java\Cmd.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
- */
