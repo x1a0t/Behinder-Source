@@ -80,6 +80,8 @@ public class MainWindowController {
     private UpdateInfoViewController updateInfoViewController;
     @FXML
     private UserCodeViewController userCodeViewController;
+    @FXML
+    private MemoryShellViewController memoryShellViewController;
     private Map<String, String> basicInfoMap = new HashMap();
     private List<Thread> workList = new ArrayList();
 
@@ -135,6 +137,7 @@ public class MainWindowController {
                                     MainWindowController.this.tunnelViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
                                     MainWindowController.this.updateInfoViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
                                     MainWindowController.this.userCodeViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
+                                    MainWindowController.this.memoryShellViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
                                 } catch (Exception var2) {
                                     var2.printStackTrace();
                                 }

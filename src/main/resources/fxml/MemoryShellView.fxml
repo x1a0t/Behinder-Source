@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rebeyond.behinder.ui.controller.MemoryShellViewController">
+   <children>
+      <Button fx:id="submit" layoutX="498.0" layoutY="36.0" mnemonicParsing="false" text="确认注入" />
+      <TextArea fx:id="textArea" layoutX="2.0" layoutY="131.0" prefHeight="418.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <TextField fx:id="urlPatern" layoutX="77.0" layoutY="93.0" promptText="urlPatern" />
+      <TextField fx:id="password" layoutX="77.0" layoutY="147.0" promptText="password" />
+      <ComboBox fx:id="webEnvs" layoutX="76.0" layoutY="36.0" prefWidth="150.0" promptText="选择环境" />
+      <Label layoutX="14.0" layoutY="36.0" prefHeight="25.0" prefWidth="54.0" text="目标环境：" />
+      <Label layoutX="14.0" layoutY="97.0" text="路由匹配：" />
+      <Label layoutX="26.0" layoutY="151.0" text="密码：" />
+      <ComboBox fx:id="shells" layoutX="325.0" layoutY="36.0" prefWidth="150.0" promptText="选择shell" />
+      <Label layoutX="262.0" layoutY="40.0" text="shell类型：" />
+   </children>
+</AnchorPane>

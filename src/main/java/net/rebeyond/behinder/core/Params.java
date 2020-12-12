@@ -3,6 +3,7 @@ package net.rebeyond.behinder.core;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.Map;
 import net.rebeyond.behinder.utils.ReplacingInputStream;
 import net.rebeyond.behinder.utils.Utils;

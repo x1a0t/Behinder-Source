@@ -62,6 +62,12 @@
 
                 </content>
             </Tab>
+            <Tab fx:id="memoryShellTab" text="内存马">
+                <content>
+                    <fx:include fx:id="memoryShellView" source="MemoryShellView.fxml" />
+
+                </content>
+            </Tab>
             <Tab fx:id="tunnelTab" text="内网穿透">
                 <content>
                     <fx:include fx:id="tunnelView" source="TunnelViewTab.fxml" />
