@@ -132,5 +132,11 @@
             <version>3.21.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>7.0.94</version>
+        </dependency>
+
     </dependencies>
 </project>
