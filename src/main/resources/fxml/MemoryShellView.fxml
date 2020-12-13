@@ -8,7 +8,7 @@
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rebeyond.behinder.ui.controller.MemoryShellViewController">
    <children>
-      <Button fx:id="submit" layoutX="498.0" layoutY="36.0" mnemonicParsing="false" text="确认注入" />
+      <Button fx:id="submit" layoutX="560.0" layoutY="36.0" mnemonicParsing="false" text="确认注入" />
       <TextArea fx:id="textArea" layoutX="2.0" layoutY="131.0" prefHeight="418.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <TextField fx:id="urlPatern" layoutX="77.0" layoutY="93.0" promptText="urlPatern" />
       <TextField fx:id="password" layoutX="77.0" layoutY="147.0" promptText="password" />

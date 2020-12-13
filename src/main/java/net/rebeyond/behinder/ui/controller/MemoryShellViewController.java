@@ -18,7 +18,7 @@ public class MemoryShellViewController {
     private ShellService currentShellService;
     private List<Thread> workList = new ArrayList();
     private Label statusLabel;
-    private String[] webEnvList = {"Tomcat"};
+    private String[] webEnvList = {"Tomcat", "Weblogic"};
     private String[] shellList = {"BehinderShell"};
     @FXML
     private ComboBox webEnvs;
@@ -60,9 +60,10 @@ public class MemoryShellViewController {
                                     this.shells.getValue().toString(),
                                     urlPatern.getText(),
                                     password.getText());
-
+                            this.textArea.appendText((String) jsonObject.get("msg"));
+                            this.statusLabel.setText((String) jsonObject.get("status"));
                         } else {
-                            this.textArea.setText("环境、shell类型、路由和密码均不能为空！");
+                            this.textArea.appendText("环境、shell类型、路由和密码均不能为空！");
                         }
                     } catch (Exception e) {
                         this.textArea.setText(e.getMessage());
