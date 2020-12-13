@@ -26,5 +26,15 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-annotations-api:7.0.94" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-api:7.0.94" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-util:7.0.94" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-servlet:2.2.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-core:2.2.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.4.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-api:3.8.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.common:wildfly-common:1.5.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.client:wildfly-client-config:1.0.1.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jboss.xnio:xnio-nio:3.8.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.threads:jboss-threads:3.1.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.servlet:jboss-servlet-api_4.0_spec:2.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.annotation:jboss-annotations-api_1.3_spec:2.0.1.Final" level="project" />
   </component>
 </module>

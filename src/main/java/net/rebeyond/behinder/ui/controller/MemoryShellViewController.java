@@ -18,7 +18,7 @@ public class MemoryShellViewController {
     private ShellService currentShellService;
     private List<Thread> workList = new ArrayList();
     private Label statusLabel;
-    private String[] webEnvList = {"Tomcat", "Weblogic"};
+    private String[] webEnvList = {"Tomcat", "Weblogic", "Wildfly"};
     private String[] shellList = {"BehinderShell", "ReGeorg"};
     @FXML
     private ComboBox webEnvs;
