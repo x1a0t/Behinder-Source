@@ -34,8 +34,6 @@ import netscape.javascript.JSObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
-
 public class PluginViewController
 {
     private ShellManager shellManager;
