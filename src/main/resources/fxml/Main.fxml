@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rebeyond.behinder.ui.controller.MainController">
+
+<GridPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rebeyond.behinder.ui.controller.MainController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="12.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -37,6 +39,11 @@
       </TitledPane>
       <MenuBar GridPane.columnSpan="2">
         <menus>
+            <Menu mnemonicParsing="false" text="生成">
+                <items>
+                    <MenuItem fx:id="generateBtn" mnemonicParsing="false" text="生成shell" />
+                </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="代理">
             <items>
               <MenuItem fx:id="proxySetupBtn" mnemonicParsing="false" text="设置代理" />
