@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rebeyond.behinder.ui.controller.ZipViewController">
+   <children>
+      <TextField fx:id="sourceDirPathInput" layoutX="28.0" layoutY="115.0" prefHeight="23.0" prefWidth="467.0" />
+      <TextField fx:id="zipFilePathInput" layoutX="28.0" layoutY="196.0" prefHeight="23.0" prefWidth="467.0" />
+      <Button fx:id="submit" layoutX="584.0" layoutY="115.0" mnemonicParsing="false" text="确认压缩" />
+      <TextField fx:id="excludeExtInput" layoutX="28.0" layoutY="289.0" prefHeight="23.0" prefWidth="467.0" promptText="png|jpg|jpeg|gif|xls|doc|ppt|pdf" text="png|jpg|jpeg|gif|xls|doc|ppt|pdf" />
+      <Label layoutX="28.0" layoutY="92.0" text="目标路径：" />
+      <Label layoutX="28.0" layoutY="170.0" text="zip路径：" />
+      <Label layoutX="28.0" layoutY="266.0" text="排除后缀：" />
+   </children>
+</AnchorPane>

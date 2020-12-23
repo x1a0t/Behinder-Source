@@ -77,6 +77,8 @@ public class MainWindowController {
     private UserCodeViewController userCodeViewController;
     @FXML
     private MemoryShellViewController memoryShellViewController;
+    @FXML
+    private ZipViewController zipViewController;
     private Map<String, String> basicInfoMap = new HashMap();
     private List<Thread> workList = new ArrayList();
 
@@ -133,6 +135,7 @@ public class MainWindowController {
                                     MainWindowController.this.updateInfoViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
                                     MainWindowController.this.userCodeViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
                                     MainWindowController.this.memoryShellViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
+                                    MainWindowController.this.zipViewController.init(MainWindowController.this.currentShellService, MainWindowController.this.workList, MainWindowController.this.statusLabel);
                                 } catch (Exception var2) {
                                     var2.printStackTrace();
                                 }

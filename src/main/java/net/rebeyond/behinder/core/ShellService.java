@@ -1167,4 +1167,23 @@ public class ShellService {
         }
         return result;
     }
+
+    public JSONObject zipCompress(String sourceDirPath, String zipFilePath, String excludeExt) throws Exception {
+        Map<String, String> params = new LinkedHashMap<>();
+        params.put("sourceDirPath", sourceDirPath);
+        params.put("zipFilePath", zipFilePath);
+        params.put("excludeExt", excludeExt);
+        params.put("mode", "compress");
+
+        byte[] data = Utils.getData(this.currentKey, this.encryptType, "Zip", params, this.currentType);
+        Map<String, Object> resultObj = Utils.requestAndParse(this.currentUrl, this.currentHeaders, data, this.beginIndex, this.endIndex);
+        byte[] resData = (byte[])resultObj.get("data");
+        String resultTxt = new String(Crypt.Decrypt(resData, this.currentKey, this.encryptType, this.currentType));
+
+        JSONObject result = new JSONObject(resultTxt);
+        for (String key : result.keySet()) {
+            result.put(key, new String(Base64.decode(result.getString(key)), "UTF-8"));
+        }
+        return result;
+    }
 }
