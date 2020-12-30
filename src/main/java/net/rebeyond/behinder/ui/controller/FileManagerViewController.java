@@ -737,6 +737,15 @@ public class FileManagerViewController {
         downloadBtn.setOnAction((event) -> {
             this.downloadFile();
         });
+        MenuItem timeStampBtn = new MenuItem("修改时间戳");
+        cm.getItems().add(timeStampBtn);
+        timeStampBtn.setOnAction(event -> {
+            try {
+                showChangeTimeStamp();
+            } catch (Exception var4) {
+                var4.printStackTrace();
+            }
+        });
     }
 
     private void createDirectory() {
@@ -847,6 +856,7 @@ public class FileManagerViewController {
         HBox buttonBox = new HBox();
         Button saveBtn = new Button("保存");
         saveBtn.setOnAction((event) -> {
+            doChangeTimeStamp(filePath, createTimeTxt.getText(), modifyTimeTxt.getText(), accessTimeTxt.getText());
         });
         Button cancelBtn = new Button("取消");
         cancelBtn.setOnAction((event) -> {
