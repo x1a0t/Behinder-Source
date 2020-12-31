@@ -152,7 +152,14 @@ public class MainController {
             gridpane.setVgap(15.0D);
             ComboBox comboBox = new ComboBox();
             comboBox.setPromptText("选择shell类型");
-            comboBox.setItems(FXCollections.observableArrayList("jsp", "php", "aspx", "asp"));
+
+            LinkedHashMap<String, String> map = new LinkedHashMap<>();
+            map.put("jsp jdk<=8", "template/shell8.jsp");
+            map.put("jsp jdk>=9", "template/shell9.jsp");
+            map.put("php", "template/shell.php");
+            map.put("aspx", "template/shell.aspx");
+            map.put("asp", "template/shell.asp");
+            comboBox.setItems(FXCollections.observableArrayList(map.keySet()));
             TextField textField = new TextField();
             Button button = new Button("生成shell");
             TextArea textArea = new TextArea();
@@ -165,27 +172,9 @@ public class MainController {
 
                 String shellType = comboBox.getValue().toString();
                 try {
-                    if(!shellType.equals("") && !textField.getText().equals("")) {
-                        String shellPath;
-                        switch (shellType) {
-                            case "jsp":
-                                shellPath = "template/shell.jsp";
-                                break;
-                            case "php":
-                                shellPath = "template/shell.php";
-                                break;
-                            case "aspx":
-                                shellPath = "template/shell.aspx";
-                                break;
-                            case "asp":
-                                shellPath = "template/shell.asp";
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected value: " + shellType);
-                        }
-                        String shellText = new String(Utils.getResourceData(shellPath));
-                        textArea.setText(shellText.replace("e45e329feb5d925b", Utils.getMD5(textField.getText())));
-                    }
+                    String shellPath = map.get(shellType);
+                    String shellText = new String(Utils.getResourceData(shellPath));
+                    textArea.setText(shellText.replace("e45e329feb5d925b", Utils.getMD5(textField.getText())));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
