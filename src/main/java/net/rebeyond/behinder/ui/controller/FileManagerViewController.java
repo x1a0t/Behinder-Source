@@ -889,6 +889,18 @@ public class FileManagerViewController {
                         String modifyTimeStamp = new String(Base64.getDecoder().decode(timeStampObj.getString("modifyTimeStamp")));
                         this.statusLabel.setText(msg);
                         modifyTimeTxt.setText(modifyTimeStamp);
+                        if (!timeStampObj.isNull("accessTime") && !timeStampObj.isNull("creationTime")) {
+                            String accessTimeStamp = new String(Base64.getDecoder().decode(timeStampObj.getString("accessTime")));
+                            String creationTimeStamp = new String(Base64.getDecoder().decode(timeStampObj.getString("creationTime")));
+                            accessTimeTxt.setText(accessTimeStamp);
+                            createTimeTxt.setText(creationTimeStamp);
+                        } else {
+                            accessTimeLabel.setDisable(true);
+                            accessTimeTxt.setDisable(true);
+                            createTimeLabel.setDisable(true);
+                            createTimeTxt.setDisable(true);
+                        }
+
                     }
                 });
             } catch (Exception var6) {

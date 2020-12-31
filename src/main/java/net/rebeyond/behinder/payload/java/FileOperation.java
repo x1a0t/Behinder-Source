@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -234,8 +233,25 @@ public class FileOperation
         Map<String, String> timeStampObj = new HashMap<>();
         if (f.exists()) {
             timeStampObj.put("modifyTimeStamp", df.format(new Date(f.lastModified())));
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows") >= 0);
+            if (System.getProperty("os.name").toLowerCase().indexOf("windows") >= 0) {
+                Object[] objects = Class.forName("java.nio.file.LinkOption").getEnumConstants();
+                Class<?> PathCls = Class.forName("java.nio.file.Path");
+                Method method = Class.forName("java.nio.file.Files").getDeclaredMethod("readAttributes", PathCls, Class.class, objects.getClass());
+                Object basicFileAttributes = method.invoke(null, f.toPath(), Class.forName("java.nio.file.attribute.BasicFileAttributes"), objects);
+//                Method lastModifiedTime = basicFileAttributes.getClass().getDeclaredMethod("lastModifiedTime");
+                Method lastAccessTime = basicFileAttributes.getClass().getDeclaredMethod("lastAccessTime");
+                Method creationTime = basicFileAttributes.getClass().getDeclaredMethod("creationTime");
+//                lastModifiedTime.setAccessible(true);
+                lastAccessTime.setAccessible(true);
+                creationTime.setAccessible(true);
 
+                Object AccessTime = lastAccessTime.invoke(basicFileAttributes);
+                Object CreationTime = creationTime.invoke(basicFileAttributes);
+                method = Class.forName("java.nio.file.attribute.FileTime").getDeclaredMethod("toMillis");
+
+                timeStampObj.put("accessTime", df.format(new Date((Long)method.invoke(AccessTime))));
+                timeStampObj.put("creationTime", df.format(new Date((Long)method.invoke(CreationTime))));
+            }
             
             result = buildJson(timeStampObj, true);
         } else {
@@ -251,25 +267,42 @@ public class FileOperation
         if (f.exists()) {
             f.setLastModified(df.parse(modifyTimeStamp).getTime());
             String version = System.getProperty("java.version");
-//            if (version.compareTo("1.7") >= 0 && System.getProperty("os.name").toLowerCase().indexOf("windows") >= 0) {
-//
-//
-//                Class<?> PathsCls = Class.forName("java.nio.file.Paths");
-//                Class<?> PathCls = Class.forName("java.nio.file.Path");
-//                Class<?> BasicFileAttributeViewCls = Class.forName("java.nio.file.attribute.BasicFileAttributeView");
-//                Class<?> FileTimeCls = Class.forName("java.nio.file.attribute.FileTime");
-//                Method getFileAttributeView = Class.forName("java.nio.file.Files").getMethod("getFileAttributeView", new Class[] { PathCls, BasicFileAttributeViewCls });
-//                Object attributes = getFileAttributeView.invoke(PathsCls.getMethod("get", new Class[] { URI.class }).invoke(path, new Object[0]), new Object[] { BasicFileAttributeViewCls });
-//                Object createTime = FileTimeCls.getMethod("fromMillis", new Class[] { Long.class }).invoke(Long.valueOf(df.parse(createTimeStamp).getTime()), new Object[0]);
-//                Object modifyTime = FileTimeCls.getMethod("fromMillis", new Class[] { Long.class }).invoke(Long.valueOf(df.parse(modifyTimeStamp).getTime()), new Object[0]);
-//                Object accessTime = FileTimeCls.getMethod("fromMillis", new Class[] { Long.class }).invoke(Long.valueOf(df.parse(accessTimeStamp).getTime()), new Object[0]);
-//                BasicFileAttributeViewCls.getMethod("setTimes", new Class[] { FileTimeCls, FileTimeCls, FileTimeCls }).invoke(attributes, new Object[] { modifyTime, accessTime, createTime });
+            if (version.compareTo("1.7") >= 0 && System.getProperty("os.name").toLowerCase().indexOf("windows") >= 0) {
+                Class<?> PathsCls = Class.forName("java.nio.file.Paths");
+                Class<?> PathCls = Class.forName("java.nio.file.Path");
+                Class<?> BasicFileAttributeViewCls = Class.forName("java.nio.file.attribute.BasicFileAttributeView");
+                Class<?> FileTimeCls = Class.forName("java.nio.file.attribute.FileTime");
+                Method getFileAttributeView = null;
+                Method[] methods = Class.forName("java.nio.file.Files").getDeclaredMethods();
+                for(Method method: methods) {
+                    if(method.getName().equals("getFileAttributeView")) {
+                        getFileAttributeView = method;
+                    }
+                }
+                Object[] objects = Class.forName("java.nio.file.LinkOption").getEnumConstants();
+                assert getFileAttributeView != null;
+                Object attributes = getFileAttributeView.invoke(null, f.toPath(), BasicFileAttributeViewCls, objects);
+
+                Method fromMillis = null;
+                methods = Class.forName("java.nio.file.attribute.FileTime").getDeclaredMethods();
+                for(Method method: methods) {
+                    if(method.getName().equals("fromMillis")) {
+                        fromMillis = method;
+                    }
+                }
+                assert fromMillis != null;
+                Object createTime = fromMillis.invoke(null, df.parse(createTimeStamp).getTime());
+                Object modifyTime = fromMillis.invoke(null, df.parse(modifyTimeStamp).getTime());
+                Object accessTime = fromMillis.invoke(null, df.parse(accessTimeStamp).getTime());
+                Method setTimes = BasicFileAttributeViewCls.getMethod("setTimes", FileTimeCls, FileTimeCls, FileTimeCls);
+                setTimes.setAccessible(true);
+                setTimes.invoke(attributes, modifyTime, accessTime, createTime);
 //
 //                if (!createTimeStamp.equals(""));
 //
 //
 //                if (!accessTimeStamp.equals(""));
-//            }
+            }
 
             result = "时间戳修改成功。";
         } else {
