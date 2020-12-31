@@ -1,12 +1,13 @@
 package net.rebeyond.behinder.ui.controller;
 
-import java.io.ByteArrayInputStream;
+import java.io.*;
 import java.net.Authenticator;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.Proxy.Type;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,23 +24,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,6 +32,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import net.rebeyond.behinder.core.Constants;
@@ -76,6 +62,8 @@ public class MainController {
     public MenuItem generateBtn;
     @FXML
     private MenuItem proxySetupBtn;
+    @FXML
+    private MenuItem importBtn;
     @FXML
     private Label statusLabel;
     @FXML
@@ -326,6 +314,31 @@ public class MainController {
             inputDialog.getDialogPane().setContent(proxyGridPane);
             inputDialog.showAndWait();
         });
+        this.importBtn.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("请选择文件路径：");
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All FILE", "*.*"));
+            File selectedFile = fileChooser.showSaveDialog(this.shellListTable.getScene().getWindow());
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(selectedFile));
+                String strLine = null;
+                while(null != (strLine = bufferedReader.readLine())){
+                    JSONObject jsonObject = new JSONObject(strLine);
+                    this.shellManager.addShell(
+                            (String) jsonObject.get("url"),
+                            (String) jsonObject.get("password"),
+                            (String) jsonObject.get("type"),
+                            (String) jsonObject.get("catagory"),
+                            (String) jsonObject.get("comment"),
+                            (String) jsonObject.get("headers")
+                    );
+                }
+                this.statusLabel.setText("导入成功，请手动刷新");
+            } catch (Exception e) {
+                this.statusLabel.setText(e.getMessage());
+            }
+        });
     }
 
     private void initCatagoryList() throws Exception {
@@ -543,11 +556,15 @@ public class MainController {
         cm.getItems().add(delBtn);
         MenuItem copyBtn = new MenuItem("复制URL");
         cm.getItems().add(copyBtn);
+        MenuItem exportBtn = new MenuItem("导出shell");
+        cm.getItems().add(exportBtn);
         SeparatorMenuItem separatorBtn = new SeparatorMenuItem();
         cm.getItems().add(separatorBtn);
         MenuItem refreshBtn = new MenuItem("刷新");
         cm.getItems().add(refreshBtn);
+        
         this.shellListTable.setContextMenu(cm);
+        this.shellListTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         openBtn.setOnAction((event) -> {
             String url = ((StringProperty)((List)this.shellListTable.getSelectionModel().getSelectedItem()).get(0)).getValue();
             String shellID = ((StringProperty)((List)this.shellListTable.getSelectionModel().getSelectedItem()).get(6)).getValue();
@@ -617,6 +634,42 @@ public class MainController {
         copyBtn.setOnAction((event) -> {
             String url = ((StringProperty)((List)this.shellListTable.getSelectionModel().getSelectedItem()).get(0)).getValue();
             this.copyString(url);
+        });
+        exportBtn.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("请选择保存路径");
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All FILE", "*.*"));
+            fileChooser.setInitialFileName("export_shell.txt");
+            File selectedFile = fileChooser.showSaveDialog(this.shellListTable.getScene().getWindow());
+            String selected = selectedFile.getAbsolutePath();
+            if (!selected.equals("")) {
+                ObservableList selectedItems = this.shellListTable.getSelectionModel().getSelectedItems();
+                Iterator iterator = selectedItems.iterator();
+                try {
+                    FileOutputStream fos = new FileOutputStream(selected);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while (iterator.hasNext()) {
+                        ArrayList columnInfo = (ArrayList) iterator.next();
+                        String id = ((StringProperty)columnInfo.get(columnInfo.size() - 1)).getValue();
+                        JSONObject shellInfo = this.shellManager.findShell(Integer.parseInt(id));
+                        shellInfo.remove("id");
+                        shellInfo.remove("ip");
+                        shellInfo.remove("os");
+                        shellInfo.remove("memo");
+                        shellInfo.remove("addtime");
+                        shellInfo.remove("updatetime");
+                        shellInfo.remove("accesstime");
+                        stringBuilder.append(shellInfo.toString());
+                        stringBuilder.append("\n");
+                    }
+                    fos.write(stringBuilder.toString().trim().getBytes(StandardCharsets.UTF_8));
+                    fos.flush();
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
         refreshBtn.setOnAction((event) -> {
             try {

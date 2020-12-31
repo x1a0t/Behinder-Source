@@ -49,7 +49,9 @@
               <MenuItem fx:id="proxySetupBtn" mnemonicParsing="false" text="设置代理" />
             </items>
           </Menu>
-          <Menu disable="true" mnemonicParsing="false" text="导入" />
+          <Menu mnemonicParsing="false" text="导入">
+              <MenuItem fx:id="importBtn" mnemonicParsing="false" text="导入shell" />
+          </Menu>
           <Menu disable="true" mnemonicParsing="false" text="批量检测" />
         </menus>
       </MenuBar>
