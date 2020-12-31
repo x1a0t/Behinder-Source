@@ -11,24 +11,6 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.asp</include>
-                    <include>**/*.dll</include>
-                    <include>**/*.php</include>
-                    <include>**/*.fxml</include>
-
-                    <include>**/*.png</include>
-                    <include>**/*.gif</include>
-                    <include>**/*.jpg</include>
-
-                    <include>**/*.html</include>
-                    <include>**/*.js</include>
-                    <include>**/*.css</include>
-
-                    <include>**/*.jar</include>
-                    <include>**/*.dll</include>
-                    <include>**/*.db</include>
-                </includes>
                 <filtering>false</filtering>
             </resource>
         </resources>
