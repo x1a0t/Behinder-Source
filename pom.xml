@@ -13,6 +13,15 @@
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
             </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.asp</include>
+                    <include>**/*.php</include>
+                    <include>**/*.dll</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
         </resources>
         <plugins>
             <plugin>
