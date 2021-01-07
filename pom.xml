@@ -19,6 +19,7 @@
                     <include>**/*.asp</include>
                     <include>**/*.php</include>
                     <include>**/*.dll</include>
+                    <include>**/*.aspx</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>

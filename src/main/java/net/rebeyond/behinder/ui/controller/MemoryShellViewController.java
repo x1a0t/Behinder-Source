@@ -14,8 +14,7 @@ public class MemoryShellViewController {
     private ShellService currentShellService;
     private List<Thread> workList = new ArrayList();
     private Label statusLabel;
-    private String[] webEnvList = {"Tomcat", "Weblogic", "Wildfly", "Websphere"};
-    private String[] shellList = {"BehinderShell", "ReGeorg"};
+
     @FXML
     private ComboBox webEnvs;
     @FXML
@@ -39,8 +38,15 @@ public class MemoryShellViewController {
     }
 
     private void initMemoryShellView() {
-        this.webEnvs.setItems(FXCollections.observableArrayList(this.webEnvList));
-        this.shells.setItems(FXCollections.observableArrayList(this.shellList));
+        String[] webEnvList = {};
+        if (this.currentShellService.currentType.equals("jsp")) {
+            webEnvList = new String[]{"Tomcat", "Weblogic", "Wildfly", "Websphere"};
+        } else if (this.currentShellService.currentType.equals("aspx")) {
+            webEnvList = new String[]{"Net"};
+        }
+        String[] shellList = {"BehinderShell", "ReGeorg"};
+        this.webEnvs.setItems(FXCollections.observableArrayList(webEnvList));
+        this.shells.setItems(FXCollections.observableArrayList(shellList));
 
         this.submit.setOnAction(
                 (event) -> {
