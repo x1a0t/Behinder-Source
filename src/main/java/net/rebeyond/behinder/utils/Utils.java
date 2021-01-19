@@ -349,7 +349,7 @@ public class Utils {
         } 
         byte[] resData = bos.toByteArray();
 
-        resData = rtrim(ltrim(new String(resData, StandardCharsets.ISO_8859_1))).getBytes(StandardCharsets.ISO_8859_1);
+        resData = ltrim(new String(resData, StandardCharsets.ISO_8859_1)).getBytes(StandardCharsets.ISO_8859_1);
         result.put("data", resData);
         Map<String, String> responseHeader = new HashMap<>();
         for (String key : conn.getHeaderFields().keySet()) {
