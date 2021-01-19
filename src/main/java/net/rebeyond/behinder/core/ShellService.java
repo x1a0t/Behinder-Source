@@ -484,6 +484,9 @@ public class ShellService {
         Map<String, String> params = new LinkedHashMap<>();
         params.put("mode", "updateTimeStamp");
         params.put("path", path);
+        params.put("content", "");
+        params.put("charset", "");
+        params.put("$newpath", "");
         params.put("createTimeStamp", createTimeStamp);
         params.put("modifyTimeStamp", modifyTimeStamp);
         params.put("accessTimeStamp", accessTimeStamp);

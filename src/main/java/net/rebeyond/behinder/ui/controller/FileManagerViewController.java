@@ -901,6 +901,12 @@ public class FileManagerViewController {
                             createTimeTxt.setDisable(true);
                         }
 
+                        //php貌似没法修改创建时间
+                        if (this.currentShellService.currentType.equals("php")) {
+                            createTimeLabel.setDisable(true);
+                            createTimeTxt.setDisable(true);
+                        }
+
                     }
                 });
             } catch (Exception var6) {
