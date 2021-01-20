@@ -63,7 +63,7 @@ function modifiyFileName($path, &$relationArr){
                 'is_dir' => true,
                 'children' => array()
                 );
-                $this->modifiyFileName($path . '/' . $file, $relationArr[$file]['children']);
+                modifiyFileName($path . '/' . $file, $relationArr[$file]['children']);
             }else{
                 $relationArr[$file] = array(
                 'originName' => iconv('GBK', 'UTF-8', $file),
