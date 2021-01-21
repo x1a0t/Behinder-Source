@@ -149,6 +149,7 @@ public class MainController {
             map.put("asp", "template/shell.asp");
             comboBox.setItems(FXCollections.observableArrayList(map.keySet()));
             TextField textField = new TextField();
+            textField.setPromptText("password");
             Button button = new Button("生成shell");
             TextArea textArea = new TextArea();
             HBox hBox = new HBox();
