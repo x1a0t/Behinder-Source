@@ -17,7 +17,7 @@ java内存马: tomcat7-9, websphere 12.2.1.3.0, wildfly17、21, websphere 20.0.0
 - [x] 启用修改文件时间戳功能(jsp,php,aspx)
 - [x] 添加.Net环境下aspx内存马的支持
 - [x] 添加shell导入导出功能
-- [x] php下默认bypass open_basedir，代码直接用哥斯拉的
+- [x] php下bypass open_basedir，代码直接用哥斯拉的
 
 ## 感谢
 * [rebeyond/Behinder](https://github.com/rebeyond/Behinder)

