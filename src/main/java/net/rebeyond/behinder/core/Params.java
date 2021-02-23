@@ -14,14 +14,6 @@ import org.objectweb.asm.FieldVisitor;
 
 public class Params
 {
-    public static class t
-        extends ClassLoader
-    {
-        public Class get(byte[] b) {
-            return defineClass(b, 0, b.length);
-        }
-    }
-
     public static byte[] getParamedClass(String clsName, final Map<String, String> params) throws Exception {
         String clsPath = String.format("net/rebeyond/behinder/payload/java/%s.class", new Object[] { clsName });
         

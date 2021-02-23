@@ -34,7 +34,6 @@ function delDir($dir)
 
 function main($mode, $path = ".", $content = "", $charset = "",$newpath="", $createTimeStamp="", $modifyTimeStamp="", $accessTimeStamp="")
 {
-    file_put_contents("1.txt", $modifyTimeStamp);
 	//$path=getgbkStr($path);
 	$path=getSafeStr($path);
     $result = array();
