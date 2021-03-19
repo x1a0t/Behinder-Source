@@ -50,7 +50,10 @@ public class Utils {
         String port = "([0-9]{1,5})";
         Pattern pattern = Pattern.compile(port);
         Matcher matcher = pattern.matcher(portTxt);
-        return (matcher.matches() && Integer.parseInt(portTxt) >= 1 && Integer.parseInt(portTxt) <= 65535); } public static Map<String, String> getKeyAndCookie(String getUrl, String password, Map<String, String> requestHeaders) throws Exception {
+        return (matcher.matches() && Integer.parseInt(portTxt) >= 1 && Integer.parseInt(portTxt) <= 65535);
+    }
+
+    public static Map<String, String> getKeyAndCookie(String getUrl, String password, Map<String, String> requestHeaders) throws Exception {
         URL url;
         HttpURLConnection urlConnection;
         String rawKey_2;
