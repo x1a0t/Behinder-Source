@@ -733,7 +733,7 @@ public class DatabaseViewController {
 
         if (result.get(0).getClass().toString().equals("class org.json.JSONArray")) {
             JSONArray fieldArray = result.getJSONArray(0);
-            int rows = result.length() - 1;
+            int rows = result.length();
             ObservableList<TableColumn> tableViewColumns = FXCollections.observableArrayList();
             Iterator var6 = fieldArray.iterator();
 
